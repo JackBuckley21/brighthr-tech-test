@@ -1,4 +1,5 @@
 import Folders from "./components/folders";
+import Files from "./components/files";
 
 
 export default function Page() {
@@ -17,13 +18,14 @@ export default function Page() {
 const otherFiles = files.filter((file) => file.type !== 'folder');
   
   return (
-    <div className="flex justify-center">
-      <li className="list-none">
+    <div className="flex justify-center my-3">
+      <li className="list-none space-y-2">
     {folders.map((folder) => (
       <Folders name={folder.name} />
     ))}
          {otherFiles.map((file) => (
-      <div>{file.name}.{file.type}</div>
+           <Files name={file.name}
+             type={file.type} />
     ))}</li>
       </div>
 )}
