@@ -1,5 +1,7 @@
 'use client'
 import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
+import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
+import ArrowDropUpOutlinedIcon from '@mui/icons-material/ArrowDropUpOutlined';
 import React, { useState } from 'react';
 import Files from './files';
 
@@ -24,29 +26,37 @@ const findFilesByFolderName = (folderName) => {
 
 const Folders = ({ name }) => {
   const [files, setFiles] = useState([]);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleClick = () => {
-    // Find the files related to the folder
     const foundFiles = findFilesByFolderName(name);
-
-    // Set the files in state
+    setIsExpanded(!isExpanded);
     setFiles(foundFiles);
   };
 
+  const arrowIcon = !isExpanded ? <ArrowDropDownOutlinedIcon onClick={handleClick} /> : <ArrowDropUpOutlinedIcon onClick={handleClick} />;
+
   return (
-    <div className='flex bg-gray-200 rounded-xl px-9' onClick={handleClick}>
+    <div className='flex bg-gray-200 rounded-xl p-9' >
       <FolderOpenOutlinedIcon/>
       {name}
+      {arrowIcon }
+    
 
-     
-      {files.length > 0 && (
-        <li className='justify-start col-span-1 mt-5 '>
+      <span className='justify-start col-span-1 mt-5 '>
+      {files.length > 0 && isExpanded && (
+          <li>
+            <row className="mx-3 space-y-2">
           {files.map((file) => (
             <Files name={file.name}
-              type={file.type} />
+              type={file.type}
+              dateAdded={file.added}
+            />
           ))}
-        </li>
+              </row>
+          </li>
         )}
+         </span>
     </div>
   )
 }
