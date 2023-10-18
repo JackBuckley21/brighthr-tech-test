@@ -24,7 +24,7 @@ const findFilesByFolderName = (folderName) => {
     }
   };
 
-const Folders = ({ name }) => {
+const Folders = ({ name, isSorted }) => {
   const [files, setFiles] = useState([]);
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -32,9 +32,24 @@ const Folders = ({ name }) => {
     const foundFiles = findFilesByFolderName(name);
     setIsExpanded(!isExpanded);
     setFiles(foundFiles);
+    sortFiles(isSorted);
   };
 
   const arrowIcon = !isExpanded ? <ArrowDropDownOutlinedIcon onClick={handleClick} /> : <ArrowDropUpOutlinedIcon onClick={handleClick} />;
+
+  const sortFiles = (isSorted) => {
+    console.log(isSorted)
+    switch (isSorted) {
+      case 'dateAdded':
+        return files.sort((a, b) => a.dateAdded - b.dateAdded);
+      case 'name':
+        return files.sort((a, b) => a.name.localeCompare(b.name));
+      default:
+        return files;
+    }
+  };
+
+  const sortedFiles = sortFiles(isSorted);
 
   return (
     <div className='flex bg-gray-200 rounded-xl p-9' >
@@ -44,10 +59,10 @@ const Folders = ({ name }) => {
     
 
       <span className='justify-start col-span-1 mt-5 '>
-      {files.length > 0 && isExpanded && (
+      {sortedFiles.length > 0 && isExpanded && (
           <li>
             <row className="mx-3 space-y-2">
-          {files.map((file) => (
+          {sortedFiles.map((file) => (
             <Files name={file.name}
               type={file.type}
               dateAdded={file.added}
